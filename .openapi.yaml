@@ -1,0 +1,461 @@
+openapi: 3.0.2
+info:
+  title: EployeeAPI
+  version: "1.0.0"
+
+paths:
+  /auth:
+    post:
+      security:
+        - bearerAuth: [ ]
+      description: "Authorization user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/user"
+      responses:
+        '200':
+          description: "Successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/success"
+        '401':
+          description: "Unauthorization"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/unauthorized_error"
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: Enternal Server Error.
+  /employees:
+    get:
+      operationId: getAll
+      description: Return a books list
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: number of skipped groups
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: max param to return
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/employees'
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: "internal server errors"
+  /employee/{id}:
+    delete:
+      description: "delete employee by id"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        '204':
+          description: "No Content"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/employee"
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '400':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/bad_request"
+        '500':
+          description: "Internal server errors"
+    get:
+      description: Get an employee
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        '200':
+          description: Get an employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/employee"
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: Enternal Server Error.
+  /employee:
+    post:
+      security:
+        - bearerAuth: [ ]
+      description: Create employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                las_name:
+                  type: string
+                position:
+                  type: string
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/uuid"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/bad_request"
+        '401':
+          description: "Unauthorization"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/unauthorized_error"
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: Enternal Server Error.
+    put:
+      description: "update employee"
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/employee"
+                - required:
+                    - update_firstName
+                    - update_lasName
+                    - update_position_id
+      responses:
+        '200':
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/employee"
+        '204':
+          description: "No content"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/no_content"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/bad_request"
+        '500':
+          description: "Internal server errors"
+
+  /positions:
+    get:
+      description: return a position list
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: number of skipped groups
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: max param to return
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/positions'
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: Enternal Server Error.
+  /position:
+    post:
+      security:
+        - bearerAuth: [ ]
+      description: Create position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                salary:
+                  type: number
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/uuid"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/bad_request"
+        '401':
+          description: "Unauthorization"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/unauthorized_error"
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: Enternal Server Error.
+    put:
+      description: "update position"
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/position"
+                - required:
+                    - update_name
+                    - update_salary
+      responses:
+        '200':
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/position"
+        '204':
+          description: "No content"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/no_content"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/bad_request"
+        '500':
+          description: "Internal server errors"
+  /position/{id}:
+    delete:
+      description: "delete position by id"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        '204':
+          description: "No Content"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/position"
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '400':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/bad_request"
+        '500':
+          description: "Internal server errors"
+    get:
+      description: Get an position
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        '200':
+          description: Get an position
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/position'
+        '404':
+          description: "Page not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/not_found_error"
+        '500':
+          description: Enternal Server Error.
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    uuid:
+      type: string
+      format: uuid
+    employee:
+      type: object
+      properties:
+        first_name:
+          type: string
+        las_name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        position_id:
+          type: string
+          format: uuid
+    position:
+      type: object
+      properties:
+        name:
+          type: string
+        salary:
+          type: number
+        id:
+          type: string
+          format: uuid
+    employees:
+      properties:
+        paging:
+          type: object
+          properties:
+            skip:
+              type: integer
+            limit:
+              type: integer
+            count:
+              type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/employee'
+      required:
+        - paging
+        - data
+    positions:
+      properties:
+        pagination:
+          type: object
+          properties:
+            skip:
+              type: integer
+            limit:
+              type: integer
+            count:
+              type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/employee'
+      required:
+        - pagination
+        - data
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    unauthorized_error:
+      description: Access token is missing or invalid
+    not_found_error:
+      description: Not Found
+    success:
+      description: Ok
+    created:
+      description: Created
+    not_allowed:
+      description: Method not allowed
+    no_content:
+      description: No content
+    bad_request:
+      description: Bad request
+    unsupported_type:
+      description: Unsupported media type
