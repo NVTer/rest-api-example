@@ -1,8 +1,7 @@
 package repository
 
 import (
-	"errors"
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 
 	"github.com/NVTer/rest-api-example/internal"
@@ -52,9 +51,7 @@ func TestGetPositions(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		result := repos.GetPositions()
-		if !reflect.DeepEqual(result, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, result)
-		}
+		assert.Equal(t, result, testCase.expected)
 	}
 }
 
@@ -84,9 +81,7 @@ func TestGetEmployees(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		result := repos.GetEmployees()
-		if !reflect.DeepEqual(result, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, result)
-		}
+		assert.Equal(t, result, testCase.expected)
 	}
 }
 
@@ -132,9 +127,7 @@ func TestAddEmployee(t *testing.T) {
 		updateData()
 		repos.AddEmployee(&testCase.add)
 		result := repos.GetEmployees()
-		if !reflect.DeepEqual(result, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, result)
-		}
+		assert.Equal(t, result, testCase.expected)
 	}
 }
 
@@ -164,9 +157,7 @@ func TestAddPosition(t *testing.T) {
 		updateData()
 		repos.AddPosition(&testCase.add)
 		result := repos.GetPositions()
-		if !reflect.DeepEqual(result, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, result)
-		}
+		assert.Equal(t, result, testCase.expected)
 	}
 }
 
@@ -213,10 +204,10 @@ func TestDeleteEmployee(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		result := repos.DeleteEmployee(testCase.delete.ID.String())
-		if result != nil && !errors.Is(result, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, result)
-		} else if result == nil && !reflect.DeepEqual(repos.GetEmployees(), testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, result)
+		if result != nil {
+			assert.Equal(t, result, testCase.err)
+		} else {
+			assert.Equal(t, repos.GetEmployees(), testCase.expected)
 		}
 	}
 }
@@ -248,10 +239,10 @@ func TestDeletePosition(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		result := repos.DeletePosition(testCase.delete.ID.String())
-		if result != nil && !errors.Is(result, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, result)
-		} else if result == nil && !reflect.DeepEqual(repos.GetPositions(), testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, result)
+		if result != nil {
+			assert.Equal(t, result, testCase.err)
+		} else {
+			assert.Equal(t, repos.GetPositions(), testCase.expected)
 		}
 	}
 }
@@ -303,14 +294,12 @@ func TestUpdateEmployee(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		result := repos.UpdateEmployee(&testCase.update)
-		if result != nil && !errors.Is(result, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, result)
-		}
-		if result == nil &&
-			repos.GetEmployees()[id.String()].FirstName != testCase.expectedFirstName &&
-			repos.GetEmployees()[id.String()].LasName != testCase.expectedLasName &&
-			repos.GetEmployees()[id.String()].PositionID != testCase.expectedPosition.ID {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase, result)
+		if result != nil {
+			assert.Equal(t, result, testCase.err)
+		} else {
+			assert.Equal(t, repos.GetEmployees()[id.String()].FirstName, testCase.expectedFirstName)
+			assert.Equal(t, repos.GetEmployees()[id.String()].LasName, testCase.expectedLasName)
+			assert.Equal(t, repos.GetEmployees()[id.String()].PositionID, testCase.expectedPosition.ID)
 		}
 	}
 }
@@ -348,13 +337,11 @@ func TestUpdatePosition(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		result := repos.UpdatePosition(&testCase.update)
-		if result != nil && !errors.Is(result, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err.Error(), result)
-		}
-		if result == nil &&
-			repos.GetPositions()[id.String()].Name != testCase.expectedName &&
-			repos.GetPositions()[id.String()].Salary != testCase.expectedSalary {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase, result)
+		if result != nil {
+			assert.Equal(t, result, testCase.err)
+		} else {
+			assert.Equal(t, repos.GetPositions()[id.String()].Name, testCase.expectedName)
+			assert.Equal(t, repos.GetPositions()[id.String()].Salary, testCase.expectedSalary)
 		}
 	}
 }

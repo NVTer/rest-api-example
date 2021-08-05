@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,12 +17,7 @@ func TestIDMiddleware(t *testing.T) {
 
 	testRequest(t, req, IDMiddleware(entry))
 
-	if len(hook.Entries) != 1 {
-		t.Fatalf("error: len = 1")
-	}
-	if hook.LastEntry().Data["correlation_id"] == nil {
-		t.Fatalf("correalation id is nil")
-	}
+	assert.NotNil(t, hook.LastEntry().Data["correlation_id"])
 }
 
 func TestTimeLogMiddleware(t *testing.T) {
@@ -30,13 +26,8 @@ func TestTimeLogMiddleware(t *testing.T) {
 	entry := logger.WithField("entry", "exists")
 
 	testRequest(t, req, TimeLogMiddleware(entry))
-
-	if len(hook.Entries) != 1 {
-		t.Fatalf("error: len = 1")
-	}
-	if hook.LastEntry().Data["work_time"] == nil {
-		t.Fatalf("correalation id is nil")
-	}
+	assert.Equal(t, 1, len(hook.Entries))
+	assert.NotNil(t, hook.LastEntry().Data["work_time"])
 }
 
 func TestAccessLogMiddleware(t *testing.T) {
@@ -45,13 +36,9 @@ func TestAccessLogMiddleware(t *testing.T) {
 	entry := logger.WithField("entry", "exists")
 	testRequest(t, req, AccessLogMiddleware(entry))
 
-	if len(hook.Entries) != 1 {
-		t.Fatalf("error: len = 1")
-	}
-	if http.MethodGet != hook.LastEntry().Data["method"] &&
-		req.Host != hook.LastEntry().Data["host"] {
-		t.Fatalf("error: expected %v; get %v", "GET", hook.LastEntry().Data["method"])
-	}
+	assert.Equal(t, 1, len(hook.Entries))
+	assert.Equal(t, http.MethodGet, hook.LastEntry().Data["method"])
+	assert.Equal(t, req.Host, hook.LastEntry().Data["host"])
 }
 
 func testRequest(t *testing.T, req *http.Request, middleware func(next http.Handler) http.Handler) {
@@ -65,7 +52,6 @@ func testRequest(t *testing.T, req *http.Request, middleware func(next http.Hand
 		}
 	})
 	r.ServeHTTP(w, req)
-	if http.StatusOK != w.Code {
-		t.Fatalf("Expected: %v; get: %v", http.StatusOK, w.Code)
-	}
+
+	assert.Equal(t, http.StatusOK , w.Code)
 }

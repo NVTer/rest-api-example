@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -178,9 +180,7 @@ func TestHand_CreateEmployee(t *testing.T) { //nolint:funlen
 		handler.CreateEmployee(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		}
+		assert.Equal(t, testCase.expected, result.StatusCode)
 	}
 }
 
@@ -277,9 +277,7 @@ func TestHand_CreatePosition(t *testing.T) { //nolint:funlen
 		handler.CreatePosition(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		}
+		assert.Equal(t, testCase.expected, result.StatusCode)
 	}
 }
 
@@ -314,19 +312,10 @@ func TestHand_DeleteEmployeeVarsZero(t *testing.T) {
 		handler.DeleteEmployee(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			er := strings.Trim(string(s), "\n")
-			if er != errs.BadRequest().Error() {
-				t.Fatalf("expected %v; get %v", er, errs.BadRequest())
-			}
-		}
-	}
+		fmt.Println(result.StatusCode)
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		assert.NotNil(t, result.Body)
+		assert.NotEmpty(t, result.Body)	}
 }
 
 func TestHand_DeleteEmployee(t *testing.T) {
@@ -373,18 +362,10 @@ func TestHand_DeleteEmployee(t *testing.T) {
 		handler.DeleteEmployee(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
-		}
-	}
+
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		assert.NotNil(t, result.Body)
+		assert.NotEmpty(t, result.Body)	}
 }
 
 func TestHand_DeletePositionVarsZero(t *testing.T) { //nolint: funlen
@@ -417,19 +398,9 @@ func TestHand_DeletePositionVarsZero(t *testing.T) { //nolint: funlen
 		handler.DeletePosition(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result)
-		} else {
-			bodyBytes, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Fatal(err)
-			}
-			bodyString := string(bodyBytes)
-			if bodyString != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, bodyString)
-			}
-		}
-	}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		assert.NotNil(t, result.Body)
+		assert.NotEmpty(t, result.Body)	}
 }
 func TestHand_DeletePosition(t *testing.T) {
 	initTest()
@@ -470,18 +441,9 @@ func TestHand_DeletePosition(t *testing.T) {
 		handler.DeletePosition(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
-		}
-	}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		assert.NotNil(t, result.Body)
+		assert.NotEmpty(t, result.Body)	}
 }
 
 func TestHand_GetEmployeeVarsZero(t *testing.T) {
@@ -514,18 +476,10 @@ func TestHand_GetEmployeeVarsZero(t *testing.T) {
 		handler.GetEmployee(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result)
-		} else {
-			bodyBytes, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Fatal(err)
-			}
-			bodyString := string(bodyBytes)
-			if bodyString == "" {
-				t.Fatal("get empty response body")
-			}
-		}
+
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		assert.NotNil(t, result.Body)
+		assert.NotEmpty(t, result.Body)
 	}
 }
 
@@ -574,18 +528,10 @@ func TestHand_GetEmployee(t *testing.T) {
 		handler.GetEmployee(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result)
-		} else {
-			bodyBytes, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Fatal(err)
-			}
-			bodyString := string(bodyBytes)
-			if bodyString == "" {
-				t.Fatal("get empty response body")
-			}
-		}
+
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		assert.NotNil(t, result.Body)
+		assert.NotEmpty(t, result.Body)
 	}
 }
 
@@ -618,18 +564,13 @@ func TestHand_GetPositionVarsZero(t *testing.T) {
 		handler.GetPosition(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result)
-		} else {
-			bodyBytes, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Fatal(err)
-			}
-			bodyString := string(bodyBytes)
-			if bodyString != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, bodyString)
-			}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		bodyBytes, err := ioutil.ReadAll(result.Body)
+		if err != nil {
+			t.Fatal(err)
 		}
+		bodyString := string(bodyBytes)
+		assert.Equal(t, testCase.resp, bodyString)
 	}
 }
 
@@ -679,17 +620,12 @@ func TestHand_GetPosition(t *testing.T) {
 		handler.GetPosition(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		s, err := ioutil.ReadAll(result.Body)
+		if err != nil {
+			t.Error(err)
 		}
+		assert.Equal(t, testCase.resp, string(s))
 	}
 }
 
@@ -743,17 +679,12 @@ func TestHand_GetEmployees(t *testing.T) { //nolint:funlen
 		handler.GetEmployees(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		s, err := ioutil.ReadAll(result.Body)
+		if err != nil {
+			t.Error(err)
 		}
+		assert.Equal(t, testCase.resp, string(s))
 	}
 }
 
@@ -801,17 +732,12 @@ func TestHand_GetPositions(t *testing.T) {
 		handler.GetPositions(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		s, err := ioutil.ReadAll(result.Body)
+		if err != nil {
+			t.Error(err)
 		}
+		assert.Equal(t, testCase.resp, string(s))
 	}
 }
 
@@ -902,17 +828,12 @@ func TestHand_UpdateEmployee(t *testing.T) { //nolint: funlen
 		handler.UpdateEmployee(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		s, err := ioutil.ReadAll(result.Body)
+		if err != nil {
+			t.Error(err)
 		}
+		assert.Equal(t, testCase.resp, string(s))
 	}
 }
 
@@ -975,16 +896,11 @@ func TestHand_UpdatePosition(t *testing.T) { //nolint:funlen
 		handler.UpdatePosition(w, r)
 		result := w.Result()
 		defer result.Body.Close()
-		if result.StatusCode != testCase.expected {
-			t.Fatalf("expected %v; get %v", testCase.expected, result.StatusCode)
-		} else {
-			s, err := ioutil.ReadAll(result.Body)
-			if err != nil {
-				t.Error(err)
-			}
-			if string(s) != testCase.resp {
-				t.Fatalf("expected %v; get %v", testCase.resp, string(s))
-			}
+		assert.Equal(t, testCase.expected, result.StatusCode)
+		s, err := ioutil.ReadAll(result.Body)
+		if err != nil {
+			t.Error(err)
 		}
+		assert.Equal(t, testCase.resp, string(s))
 	}
 }

@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-	"errors"
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 
 	"github.com/NVTer/rest-api-example/internal"
@@ -87,12 +86,11 @@ func TestCreatePosition(t *testing.T) {
 	for _, testCase := range testTable {
 		id, result := serv.CreatePosition(testCase.ctx, &testCase.add)
 		position := repos.GetPositions()[id]
-		if result != nil && !errors.Is(result, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, result)
-		} else if result == nil &&
-			position.Name != testCase.expectedName &&
-			position.Salary != testCase.expectedSalary {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase, result)
+		if result != nil {
+			assert.Equal(t, result, testCase.err)
+		} else {
+			assert.Equal(t, position.Name, testCase.expectedName )
+			assert.Equal(t, position.Salary, testCase.expectedSalary )
 		}
 	}
 }
@@ -164,13 +162,12 @@ func TestCreateEmployee(t *testing.T) { //nolint:funlen
 	for _, testCase := range testTable {
 		id, result := serv.CreateEmployee(testCase.ctx, &testCase.add)
 		employee := repos.GetEmployees()[id]
-		if result != nil && !errors.Is(result, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, result)
-		} else if result == nil &&
-			employee.FirstName != testCase.expectedFirstName &&
-			employee.LasName != testCase.expectedLasName &&
-			employee.PositionID.String() != testCase.positionID {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase, result)
+		if result != nil {
+			assert.Equal(t, result, testCase.err)
+		} else  {
+			assert.Equal(t, employee.FirstName, testCase.expectedFirstName)
+			assert.Equal(t, employee.LasName, testCase.expectedLasName)
+			assert.Equal(t, employee.PositionID.String(), testCase.positionID )
 		}
 	}
 }
@@ -194,11 +191,10 @@ func TestGetPositionZero(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		positions, err := serv.GetPositions(testCase.ctx, testCase.limit, testCase.offset)
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			!reflect.DeepEqual(positions, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, positions, testCase.expected)
 		}
 	}
 }
@@ -245,11 +241,10 @@ func TestGetPositions(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		positions, err := serv.GetPositions(testCase.ctx, testCase.limit, testCase.offset)
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			!reflect.DeepEqual(positions, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, positions)
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, positions, testCase.expected)
 		}
 	}
 }
@@ -273,11 +268,10 @@ func TestGetEmployeeZero(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		employees, err := serv.GetEmployees(testCase.ctx, testCase.limit, testCase.offset)
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			!reflect.DeepEqual(employees, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, employees, testCase.expected)
 		}
 	}
 }
@@ -336,11 +330,10 @@ func TestGetEmployees(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		employees, err := serv.GetEmployees(testCase.ctx, testCase.limit, testCase.offset)
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			!reflect.DeepEqual(employees, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil{
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, employees, testCase.expected)
 		}
 	}
 }
@@ -381,11 +374,10 @@ func TestGetPosition(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		position, err := serv.GetPosition(testCase.ctx, testCase.id)
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			position != testCase.expected {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil{
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, position, testCase.expected )
 		}
 	}
 }
@@ -430,11 +422,10 @@ func TestGetEmployee(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		employee, err := serv.GetEmployee(testCase.ctx, testCase.id)
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			employee != testCase.expected {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, employee, testCase.expected )
 		}
 	}
 }
@@ -464,11 +455,10 @@ func TestDeletePosition(t *testing.T) {
 	for _, testCase := range testTable {
 		err := serv.DeletePosition(testCase.ctx, testCase.delete)
 		positions := repos.GetPositions()
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			!reflect.DeepEqual(positions, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, positions, testCase.expected)
 		}
 	}
 }
@@ -504,11 +494,10 @@ func TestDeleteEmployee(t *testing.T) {
 	for _, testCase := range testTable {
 		err := serv.DeleteEmployee(testCase.ctx, testCase.delete)
 		employees := repos.GetEmployees()
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil &&
-			!reflect.DeepEqual(employees, testCase.expected) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.expected, err)
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else {
+			assert.Equal(t, employees, testCase.expected)
 		}
 	}
 }
@@ -542,9 +531,9 @@ func TestUpdatePosition(t *testing.T) {
 	for _, testCase := range testTable {
 		err := serv.UpdatePosition(testCase.ctx, &testCase.update)
 		_, ok := repos.GetPositions()[testCase.update.ID.String()]
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil && !ok {
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else if !ok {
 			t.Errorf("Error!\n Expected : true;\nResult: %#v\n", ok)
 		}
 	}
@@ -596,9 +585,9 @@ func TestUpdateEmployee(t *testing.T) {
 	for _, testCase := range testTable {
 		err := serv.UpdateEmployee(testCase.ctx, &testCase.update)
 		_, ok := repos.GetEmployees()[testCase.update.ID.String()]
-		if err != nil && !errors.Is(err, testCase.err) {
-			t.Errorf("Error!\n Expected : %#v;\nResult: %#v\n", testCase.err, err)
-		} else if err == nil && !ok {
+		if err != nil {
+			assert.Equal(t, err, testCase.err)
+		} else if !ok {
 			t.Errorf("Error!\n Expected : true;\nResult: %#v\n", ok)
 		}
 	}
