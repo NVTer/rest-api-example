@@ -315,7 +315,8 @@ func TestHand_DeleteEmployeeVarsZero(t *testing.T) {
 		fmt.Println(result.StatusCode)
 		assert.Equal(t, testCase.expected, result.StatusCode)
 		assert.NotNil(t, result.Body)
-		assert.NotEmpty(t, result.Body)	}
+		assert.NotEmpty(t, result.Body)
+	}
 }
 
 func TestHand_DeleteEmployee(t *testing.T) {
@@ -365,7 +366,8 @@ func TestHand_DeleteEmployee(t *testing.T) {
 
 		assert.Equal(t, testCase.expected, result.StatusCode)
 		assert.NotNil(t, result.Body)
-		assert.NotEmpty(t, result.Body)	}
+		assert.NotEmpty(t, result.Body)
+	}
 }
 
 func TestHand_DeletePositionVarsZero(t *testing.T) { //nolint: funlen
@@ -400,7 +402,8 @@ func TestHand_DeletePositionVarsZero(t *testing.T) { //nolint: funlen
 		defer result.Body.Close()
 		assert.Equal(t, testCase.expected, result.StatusCode)
 		assert.NotNil(t, result.Body)
-		assert.NotEmpty(t, result.Body)	}
+		assert.NotEmpty(t, result.Body)
+	}
 }
 func TestHand_DeletePosition(t *testing.T) {
 	initTest()
@@ -443,7 +446,8 @@ func TestHand_DeletePosition(t *testing.T) {
 		defer result.Body.Close()
 		assert.Equal(t, testCase.expected, result.StatusCode)
 		assert.NotNil(t, result.Body)
-		assert.NotEmpty(t, result.Body)	}
+		assert.NotEmpty(t, result.Body)
+	}
 }
 
 func TestHand_GetEmployeeVarsZero(t *testing.T) {

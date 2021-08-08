@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/NVTer/rest-api-example/internal/handler"
 	"net/http"
 
-	"github.com/NVTer/rest-api-example/internal/handler"
 	"github.com/NVTer/rest-api-example/internal/middleware"
 	"github.com/NVTer/rest-api-example/internal/repository"
 	"github.com/NVTer/rest-api-example/internal/service"

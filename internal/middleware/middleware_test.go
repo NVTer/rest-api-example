@@ -53,5 +53,5 @@ func testRequest(t *testing.T, req *http.Request, middleware func(next http.Hand
 	})
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK , w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 }

@@ -89,8 +89,8 @@ func TestCreatePosition(t *testing.T) {
 		if result != nil {
 			assert.Equal(t, result, testCase.err)
 		} else {
-			assert.Equal(t, position.Name, testCase.expectedName )
-			assert.Equal(t, position.Salary, testCase.expectedSalary )
+			assert.Equal(t, position.Name, testCase.expectedName)
+			assert.Equal(t, position.Salary, testCase.expectedSalary)
 		}
 	}
 }
@@ -164,10 +164,10 @@ func TestCreateEmployee(t *testing.T) { //nolint:funlen
 		employee := repos.GetEmployees()[id]
 		if result != nil {
 			assert.Equal(t, result, testCase.err)
-		} else  {
+		} else {
 			assert.Equal(t, employee.FirstName, testCase.expectedFirstName)
 			assert.Equal(t, employee.LasName, testCase.expectedLasName)
-			assert.Equal(t, employee.PositionID.String(), testCase.positionID )
+			assert.Equal(t, employee.PositionID.String(), testCase.positionID)
 		}
 	}
 }
@@ -330,7 +330,7 @@ func TestGetEmployees(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		employees, err := serv.GetEmployees(testCase.ctx, testCase.limit, testCase.offset)
-		if err != nil{
+		if err != nil {
 			assert.Equal(t, err, testCase.err)
 		} else {
 			assert.Equal(t, employees, testCase.expected)
@@ -374,10 +374,10 @@ func TestGetPosition(t *testing.T) {
 	}
 	for _, testCase := range testTable {
 		position, err := serv.GetPosition(testCase.ctx, testCase.id)
-		if err != nil{
+		if err != nil {
 			assert.Equal(t, err, testCase.err)
 		} else {
-			assert.Equal(t, position, testCase.expected )
+			assert.Equal(t, position, testCase.expected)
 		}
 	}
 }
@@ -425,7 +425,7 @@ func TestGetEmployee(t *testing.T) {
 		if err != nil {
 			assert.Equal(t, err, testCase.err)
 		} else {
-			assert.Equal(t, employee, testCase.expected )
+			assert.Equal(t, employee, testCase.expected)
 		}
 	}
 }
